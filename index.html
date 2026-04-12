@@ -160,11 +160,11 @@
 
           <label style="margin-top:20px">Tu experiencia</label>
           <div class="stars" id="stars" aria-label="calificación">
-            <div class="star" data-value="1"></div>
-            <div class="star" data-value="2"></div>
-            <div class="star" data-value="3"></div>
-            <div class="star" data-value="4"></div>
-            <div class="star" data-value="5"></div>
+            <div class="star" data-value="1">★</div>
+            <div class="star" data-value="2">★</div>
+            <div class="star" data-value="3">★</div>
+            <div class="star" data-value="4">★</div>
+            <div class="star" data-value="5">★</div>
             <span style="margin-left:auto" class="chip" id="scoreLabel">0 / 5</span>
           </div>
 
@@ -285,7 +285,7 @@
             <div class="rhead">
               <div>
                 <div class="airline">${escapeHtml(review.title || 'Reseña sin título')}</div>
-                <div class="rating-bubbles">${'<span class="bubble fill"></span>'.repeat(review.rating)}${'<span class="bubble"></span>'.repeat(5-review.rating)}</div>
+                <div class="rating">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
                 <div class="meta2">
                   <span>${escapeHtml(review.name)}</span> · 
                   <span>Vuelo: ${review.flightDate ? new Date(review.flightDate).toLocaleDateString() : 'N/A'}</span> · 
