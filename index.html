@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AirReviews — Reseñas de Aerolíneas</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:rgba(11, 18, 32, 0.8); --accent:#06b6d4; --muted:#94a3b8; --glass: rgba(255,255,255,0.05);
+      --radius:12px; --maxw:980px;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color-scheme: dark; --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#061025 0%, #07121b 60%);
+      color:#e6eef6;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:28px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    .app{
+      width:100%;
+      max-width:var(--maxw);
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
+      border-radius:16px;
+      padding:20px;
+      box-shadow: var(--shadow);
+      border:1px solid rgba(255,255,255,0.03);
+      backdrop-filter: blur(8px);
+    }
+    header{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:18px;
+    }
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .logo{
+      width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7c3aed);
+      display:flex;align-items:center;justify-content:center;font-weight:700;color:#001;
+      box-shadow:0 6px 18px rgba(3,7,18,0.6);
+    }
+    h1{font-size:18px;margin:0}
+    p.sub{margin:0;color:var(--muted);font-size:13px}
+    .controls{display:flex;gap:10px;align-items:center}
+    .search{
+      background:var(--card);border:1px solid rgba(255,255,255,0.03);padding:8px 12px;border-radius:10px;color:inherit;
+      display:flex;gap:8px;align-items:center;
+    }
+    .search input{background:transparent;border:none;outline:none;color:inherit;width:180px}
+    .btn{
+      background:linear-gradient(180deg,var(--accent),#0891b2);color:#001;padding:8px 12px;border-radius:10px;border:none;font-weight:600;cursor:pointer;
+      box-shadow:0 6px 18px rgba(6,38,44,0.25);
+    }
+    main{display:grid;grid-template-columns:380px 1fr;gap:18px}
+    /* LEFT: formulario */
+    .card{
+      background:var(--card);padding:14px;border-radius:var(--radius);border:1px solid rgba(255,255,255,0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    select,input,textarea{
+      width:100%;padding:10px;border-radius:8px;background:var(--glass);border:1px solid rgba(255,255,255,0.1);color:inherit;outline:none;
+      font-size:14px; transition: border-color 0.2s;
+    }
+    select:focus, input:focus, textarea:focus { border-color: var(--accent); background: rgba(255,255,255,0.08); }
+    textarea{min-height:110px;resize:vertical}
+    .stars{display:flex;gap:6px;align-items:center;margin:8px 0}
+    .star{cursor:pointer;font-size:22px;opacity:0.35; transition: transform 0.1s; }
+    .star:hover { transform: scale(1.2); }
+    .star.active{color:gold;opacity:1; text-shadow: 0 0 8px rgba(255,215,0,0.4); }
+    .meta{display:flex;gap:10px;align-items:center;margin-top:10px}
+    .chip{background:transparent;border:1px dashed rgba(255,255,255,0.03);padding:6px 8px;border-radius:999px;font-size:13px;color:var(--muted)}
+    .toggle-btn { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; color: var(--muted); }
+    .toggle-btn.active { background: var(--accent); color: #001; border-color: var(--accent); }
+    
+    /* RIGHT: lista */
+    .list-container{max-height: 650px; overflow-y: auto; padding-right: 8px;}
+    .list-container::-webkit-scrollbar { width: 4px; }
+    .list-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+    .list{display:flex;flex-direction:column;gap:12px}
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .review{
+      background: rgba(255,255,255,0.02);
+      padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.05);display:flex;gap:12px;align-items:flex-start;
+      animation: fadeIn 0.4s ease forwards;
+    }
+    .avatar{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#334155,#0ea5a4);display:flex;align-items:center;justify-content:center;font-weight:700}
+    .rbody{flex:1}
+    .rhead{display:flex;justify-content:space-between;gap:8px}
+    .airline{font-weight:700}
+    .rating{display:flex;gap:4px;color:gold}
+    .comment{margin-top:8px;color:#dbeafe}
+    .meta2{margin-top:8px;color:var(--muted);font-size:13px;display:flex;gap:10px;align-items:center}
+    .del-btn{background:transparent;border:none;color:#f87171;cursor:pointer;font-size:12px;opacity:0.6;transition:opacity 0.2s}
+    .del-btn:hover{opacity:1}
+    .empty{padding:40px;border-radius:12px;text-align:center;color:var(--muted);background:linear-gradient(180deg, transparent, rgba(255,255,255,0.01))}
+    footer{margin-top:20px;color:var(--muted);font-size:12px;text-align:center; opacity: 0.7;}
+    
+    /* Toast */
+    #toast{position:fixed;bottom:20px;right:20px;background:var(--accent);color:#001;padding:12px 20px;border-radius:10px;font-weight:600;box-shadow:0 10px 20px rgba(0,0,0,0.3);display:none;z-index:100;animation:fadeIn 0.3s;}
+
+    /* responsive */
+    @media (max-width:880px){
+      main{grid-template-columns:1fr;max-height:none}
+      .search input{width:110px}
+    }
+  </style>
+</head>
+<body>
+  <div id="toast">Reseña guardada con éxito</div>
+  <div class="app" id="app">
+    <header>
+      <div class="brand">
+        <div class="logo">AR</div>
+        <div>
+          <h1>AirReviews</h1>
+          <p class="sub">Comparte y consulta reseñas reales de aerolíneas</p>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="search" title="Buscar reseñas">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="opacity:.7"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="2"/></svg>
+          <input id="search" placeholder="Buscar aerolínea, texto..." />
+        </div>
+        <button class="btn" id="clearBtn" title="Limpiar reseñas de ejemplo">Limpiar</button>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <div class="card">
+          <label for="airline">¿Con qué aerolínea volaste?</label>
+          <select id="airline">
+            <option value="SkyFly">SkyFly</option>
+            <option value="AeroPlus">AeroPlus</option>
+            <option value="Nimbus Air">Nimbus Air</option>
+            <option value="ContinentalX">ContinentalX</option>
+            <option value="BudgetWings">BudgetWings</option>
+          </select>
+
+          <label for="title" style="margin-top:20px">Título de la reseña</label>
+          <input id="title" placeholder="Ej. Increíble atención al cliente" />
+
+          <label for="flightDate" style="margin-top:20px">Fecha del viaje</label>
+          <input type="date" id="flightDate" />
+
+          <label style="margin-top:20px">Tu experiencia</label>
+          <div class="stars" id="stars" aria-label="calificación">
+            <div class="star" data-value="1"></div>
+            <div class="star" data-value="2"></div>
+            <div class="star" data-value="3"></div>
+            <div class="star" data-value="4"></div>
+            <div class="star" data-value="5"></div>
+            <span style="margin-left:auto" class="chip" id="scoreLabel">0 / 5</span>
+          </div>
+
+          <label for="comment" style="margin-top:20px">Comentario detallado</label>
+          <textarea id="comment" maxlength="500" placeholder="Describe tu experiencia: check-in, comodidad, tripulación, puntualidad..."></textarea>
+          <div id="charCount" style="text-align:right; font-size:11px; color:var(--text-muted); margin-top:4px">0 / 500</div>
+
+          <div class="meta">
+            <button class="toggle-btn" id="anonymousToggle">
+              Modo Anónimo: <span>No</span>
+            </button>
+            <div style="flex:1"></div>
+            <button class="btn" id="submit">Publicar</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+          <label>Visualización</label>
+          <div style="display:flex; flex-direction:column; gap:10px">
+            <select id="sort">
+              <option value="new">Más recientes</option>
+              <option value="rating_desc">Mejor calificación</option>
+            </select>
+            <button class="btn btn-outline" id="sampleBtn">Cargar ejemplos</button>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="card" style="padding:0; overflow:hidden">
+          <div style="padding: 24px; border-bottom: 1px solid var(--border); background: #fcfdfe;">
+            <h2 id="countLabel" style="margin:0; font-size: 18px;">Cargando opiniones...</h2>
+            <div id="avgLabel" style="font-size: 14px; font-weight: 600; color: var(--accent); margin-top: 4px;"></div>
+          </div>
+          <div class="list" id="reviewsList">
+            <div class="empty" id="empty">Aún no hay reseñas. ¡Sé el primero en compartir tu viaje!</div>
+          </div>
+        </div>
+
+        <footer>
+          © 2024 AirReviews — Tu comunidad global de viajeros.
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function(){
+      const starsEl = document.getElementById('stars');
+      const starEls = Array.from(starsEl.querySelectorAll('.star'));
+      const scoreLabel = document.getElementById('scoreLabel');
+      const submitBtn = document.getElementById('submit');
+      const reviewsList = document.getElementById('reviewsList');
+      const emptyEl = document.getElementById('empty');
+      const countLabel = document.getElementById('countLabel');
+      const avgLabel = document.getElementById('avgLabel');
+      const searchInput = document.getElementById('search');
+      const sortSelect = document.getElementById('sort');
+      const sampleBtn = document.getElementById('sampleBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const anonToggle = document.getElementById('anonymousToggle');
+      const toast = document.getElementById('toast');
+      const commentArea = document.getElementById('comment');
+      const charCount = document.getElementById('charCount');
+
+      let rating = 0;
+      let anonymous = false;
+      let reviews = JSON.parse(localStorage.getItem('air_reviews_data') || '[]');
+
+      function showToast(msg, color = 'var(--accent)') {
+        toast.textContent = msg;
+        toast.style.background = color;
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 3000);
+      }
+
+      commentArea.addEventListener('input', () => { charCount.textContent = `${commentArea.value.length} / 500`; });
+
+      const save = () => localStorage.setItem('air_reviews_data', JSON.stringify(reviews));
+
+      function renderStars(r){
+        starEls.forEach(s => {
+          const v = +s.dataset.value;
+          s.classList.toggle('active', v <= r);
+        });
+        scoreLabel.textContent = r + ' / 5';
+      }
+
+      starsEl.addEventListener('click', (e)=>{
+        const s = e.target.closest('.star');
+        if(!s) return;
+        rating = +s.dataset.value;
+        renderStars(rating);
+      });
+
+      starsEl.addEventListener('mouseover', (e)=>{
+        const s = e.target.closest('.star');
+        if(!s) return;
+        renderStars(+s.dataset.value);
+      });
+      starsEl.addEventListener('mouseout', ()=> renderStars(rating));
+
+      anonToggle.addEventListener('click', ()=>{
+        anonymous = !anonymous;
+        anonToggle.classList.toggle('active', anonymous);
+        anonToggle.querySelector('span').textContent = anonymous ? 'Sí' : 'No';
+      });
+
+      function createReviewNode(review){
+        const el = document.createElement('div');
+        el.className = 'review';
+        el.innerHTML = `
+          <div class="avatar" aria-hidden="true">${review.name.slice(0,2).toUpperCase()}</div>
+          <div class="rbody">
+            <div style="float:right">
+               <button class="del-btn" data-id="${review.id}">Eliminar</button>
+            </div>
+            <div class="rhead">
+              <div>
+                <div class="airline">${escapeHtml(review.title || 'Reseña sin título')}</div>
+                <div class="rating-bubbles">${'<span class="bubble fill"></span>'.repeat(review.rating)}${'<span class="bubble"></span>'.repeat(5-review.rating)}</div>
+                <div class="meta2">
+                  <span>${escapeHtml(review.name)}</span> · 
+                  <span>Vuelo: ${review.flightDate ? new Date(review.flightDate).toLocaleDateString() : 'N/A'}</span> · 
+                  <span style="font-size:11px">Publicado: ${new Date(review.date).toLocaleDateString()}</span>
+                </div>
+                <div style="color:var(--muted);font-size:13px;margin-top:6px">${review.scoreText || ''}</div>
+              </div>
+            </div>
+            <div class="comment">${escapeHtml(review.comment).replace(/\n/g,'<br>')}</div>
+          </div>
+        `;
+        return el;
+      }
+
+      function updateList(){
+        // filter/search
+        const q = searchInput.value.trim().toLowerCase();
+        let visible = reviews.filter(r => {
+          if(!q) return true;
+          return (r.airline + ' ' + (r.title||'') + ' ' + r.comment + ' ' + r.name).toLowerCase().includes(q);
+        });
+        // sort
+        const mode = sortSelect.value;
+        if(mode === 'rating_desc') visible.sort((a,b)=>b.rating-a.rating || b.date-a.date);
+        else if(mode === 'rating_asc') visible.sort((a,b)=>a.rating-b.rating || b.date-a.date);
+        else visible.sort((a,b)=>b.date-a.date);
+        // render
+        reviewsList.innerHTML = '';
+        if(visible.length === 0){
+          reviewsList.appendChild(emptyEl);
+        } else {
+          visible.forEach(r => reviewsList.appendChild(createReviewNode(r)));
+        }
+        
+        // Global stats
+        countLabel.textContent = reviews.length + (reviews.length===1 ? ' reseña' : ' reseñas');
+        const avg = reviews.length ? (reviews.reduce((s,x)=>s+x.rating,0)/reviews.length).toFixed(1) : '—';
+        avgLabel.textContent = reviews.length ? `Puntuación media: ${avg} / 5` : '';
+      }
+
+      reviewsList.addEventListener('click', (e) => {
+        if(e.target.classList.contains('del-btn')){
+          const id = e.target.dataset.id;
+          reviews = reviews.filter(r => r.id !== id);
+          save();
+          updateList();
+          showToast('Reseña eliminada', '#f87171');
+        }
+      });
+
+      function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+      submitBtn.addEventListener('click', ()=>{
+        const airline = document.getElementById('airline').value;
+        const title = document.getElementById('title').value.trim();
+        const comment = document.getElementById('comment').value.trim();
+        const flightDate = document.getElementById('flightDate').value;
+
+        if(!rating){
+          alert('Por favor selecciona una calificación (estrellas).'); return;
+        }
+        if(!comment){
+          alert('Por favor escribe un comentario.'); return;
+        }
+
+        const review = {
+          id: Date.now().toString(36),
+          airline, title, comment, rating, flightDate,
+          name: anonymous ? 'Anónimo' : ('Usuario ' + String(Math.floor(Math.random()*9000+1000))),
+          date: Date.now(),
+          scoreText: rating >= 4 ? 'Muy recomendable' : rating === 3 ? 'Aceptable' : 'No recomendable'
+        };
+
+        reviews.push(review);
+        save();
+        rating = 0; renderStars(0); 
+        ['title', 'comment', 'flightDate'].forEach(id => document.getElementById(id).value = '');
+        updateList();
+        showToast('¡Gracias por tu reseña!');
+        charCount.textContent = '0 / 500';
+      });
+
+      searchInput.addEventListener('input', updateList);
+      sortSelect.addEventListener('change', updateList);
+
+      sampleBtn.addEventListener('click', ()=>{
+        const samples = [
+          {airline:'SkyFly', title:'Vuelo puntual', comment:'Muy buen servicio, asientos cómodos y tripulación amable.', rating:5, name:'Lucía', date:Date.now()-1000*60*60*24*2, scoreText:'Excelente', flightDate: '2023-10-15'},
+          {airline:'BudgetWings', title:'Equipaje perdido', comment:'Mi maleta tardó 3 días en llegar. Atención al cliente deficiente.', rating:2, name:'Carlos', date:Date.now()-1000*60*60*24*5, scoreText:'Mala experiencia', flightDate: '2023-11-01'},
+          {airline:'Nimbus Air', title:'Buena relación calidad-precio', comment:'Precio competitivo y vuelo sin complicaciones.', rating:4, name:'Mateo', date:Date.now()-1000*60*60*24*8, scoreText:'Recomendable', flightDate: '2023-09-20'},
+          {airline:'AeroPlus', title:'Sorpresa positiva', comment:'Mejor de lo esperado, entretenimiento a bordo y snacks incluidos.', rating:4, name:'Sofía', date:Date.now()-1000*60*60*24*1, scoreText:'Muy bueno', flightDate: '2023-12-05'}
+        ];
+        reviews = reviews.concat(samples.map(s=>Object.assign({},s,{id:Math.random().toString(36).slice(2)})));
+        save();
+        updateList();
+      });
+
+      clearBtn.addEventListener('click', ()=>{
+        if(!confirm('¿Borrar todas las reseñas guardadas?')) return;
+        reviews = [];
+        save();
+        updateList();
+      });
+
+      // initial
+      renderStars(0);
+      updateList();
+
+      // Keyboard: Enter on search clears focus to apply immediately on mobile
+      searchInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') e.target.blur(); });
+    })();
+  </script>
+</body>
+</html>
