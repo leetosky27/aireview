@@ -53,3 +53,14 @@ La interfaz ha sido diseñada bajo un concepto **Aeronáutico/Minimalista** que 
 
 ---
 *Este proyecto representa un esfuerzo por unir la recolección de datos masivos con la interpretación inteligente en el sector del transporte aéreo colombiano.*
+
+## 👥 Créditos e Información Académica
+
+**Elaborado por:**
+1. **Martin Lee**
+2. **Nicolas Zarate**
+
+**Institución:** Corporación Universitaria Minuto de Dios  
+**Docente:** Hector Ladino  
+**Año:** 2026  
+**Curso:** Introducción a la Ciencia de Datos e Inteligencia Artificial
