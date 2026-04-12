@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario - AIReview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f1724;
+            --card: rgba(11, 18, 32, 0.8);
+            --accent: #06b6d4;
+            --muted: #94a3b8;
+            --white: #e6eef6;
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body {
+            background: linear-gradient(180deg, #061025 0%, #07121b 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--white);
+            overflow-x: hidden;
+        }
+        .profile-card {
+            position: relative;
+            z-index: 1;
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+        h1 { font-size: 24px; margin-bottom: 20px; text-align: center; color: var(--accent); }
+        .photo-section { text-align: center; margin-bottom: 25px; }
+        .photo-preview {
+            width: 100px; height: 100px; border-radius: 50%;
+            background: #1e293b; border: 2px solid var(--accent);
+            margin: 0 auto 10px; display: flex; align-items: center; justify-content: center;
+            font-size: 40px; overflow: hidden;
+        }
+        .photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full-width { grid-column: span 2; }
+
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { display: block; font-size: 0.85rem; margin-bottom: 5px; color: var(--muted); }
+        .input-group input {
+            width: 100%; padding: 12px; border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1); background: #1e293b;
+            color: white; outline: none; transition: 0.3s;
+        }
+        .input-group input:focus { border-color: var(--accent); }
+        
+        .btn-save {
+            width: 100%; padding: 12px; border: none; border-radius: 10px;
+            background: linear-gradient(180deg, var(--accent), #0891b2);
+            color: #001; font-weight: 600; cursor: pointer; margin-top: 10px;
+        }
+        .btn-back {
+            display: block; text-align: center; margin-top: 15px;
+            color: var(--muted); text-decoration: none; font-size: 0.9rem;
+        }
+        .btn-back:hover { color: var(--accent); }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <h1>Mi Perfil</h1>
+        <div class="photo-section">
+            <div class="photo-preview" id="preview">👤</div>
+            <input type="file" id="photoInput" style="display:none" accept="image/*">
+            <button type="button" onclick="document.getElementById('photoInput').click()" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:0.8rem">Cambiar foto de perfil</button>
+        </div>
+        
+        <form id="profileForm" class="grid-form">
+            <div class="input-group full-width">
+                <label>Nombre Completo</label>
+                <input type="text" id="name" placeholder="Juan Pérez" required>
+            </div>
+            <div class="input-group">
+                <label>Nacionalidad</label>
+                <input type="text" id="nationality" placeholder="Colombiana">
+            </div>
+            <div class="input-group">
+                <label>País de Residencia</label>
+                <input type="text" id="country" placeholder="Colombia">
+            </div>
+            <div class="input-group">
+                <label>Cédula / ID</label>
+                <input type="text" id="id" placeholder="1029384756">
+            </div>
+            <div class="input-group">
+                <label>Teléfono de Contacto</label>
+                <input type="tel" id="phone" placeholder="+57 300 000 0000">
+            </div>
+            <div class="full-width">
+                <button type="submit" class="btn-save">ACTUALIZAR Y GUARDAR</button>
+            </div>
+        </form>
+        <a href="index.html" class="btn-back">← Volver al inicio</a>
+    </div>
+
+    <script>
+        const photoInput = document.getElementById('photoInput');
+        const preview = document.getElementById('preview');
+        const form = document.getElementById('profileForm');
+
+        photoInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) { preview.innerHTML = `<img src="${e.target.result}">`; }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Perfil actualizado con éxito');
+        });
+    </script>
+</body>
+</html>

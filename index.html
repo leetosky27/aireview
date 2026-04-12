@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AirReviews — Reseñas de Aerolíneas</title>
+  <title>AIReview — Reseñas de Aerolíneas</title>
   <style>
     :root{
       --bg:#0f1724; --card:rgba(11, 18, 32, 0.8); --accent:#06b6d4; --muted:#94a3b8; --glass: rgba(255,255,255,0.05);
@@ -51,6 +51,21 @@
       display:flex;align-items:center;justify-content:center;font-weight:700;color:#001;
       box-shadow:0 6px 18px rgba(3,7,18,0.6);
     }
+    /* Dropdown User Menu */
+    .dropdown { position: relative; }
+    .dropdown-content {
+      display: none; position: absolute; top: 110%; left: 0;
+      background: #1e293b; min-width: 160px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1); z-index: 1000; overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .dropdown-content a {
+      color: #e6eef6; padding: 12px 16px; text-decoration: none;
+      display: block; font-size: 14px; transition: background 0.2s;
+    }
+    .dropdown-content a:hover { background: rgba(255,255,255,0.05); color: var(--accent); }
+    .dropdown.active .dropdown-content { display: block; }
+
     h1{font-size:18px;margin:0}
     p.sub{margin:0;color:var(--muted);font-size:13px}
     .controls{display:flex;gap:10px;align-items:center}
@@ -127,10 +142,16 @@
   <div class="app" id="app">
     <header>
       <div class="brand">
-        <div class="logo">AR</div>
+        <div class="dropdown" id="userDropdown">
+          <div class="logo" style="cursor:pointer">AR</div>
+          <div class="dropdown-content">
+            <a href="profile.html">Ver Perfil</a>
+            <a href="login.html">Cerrar Sesión</a>
+          </div>
+        </div>
         <div>
-          <h1>AirReviews</h1>
-          <p class="sub">Comparte y consulta reseñas reales de aerolíneas</p>
+          <h1>AIReview</h1>
+          <p class="sub">Tu comunidad inteligente de reseñas aéreas</p>
         </div>
       </div>
       <div class="controls">
@@ -220,7 +241,7 @@
         </div>
 
         <footer>
-          © 2024 AirReviews — Tu comunidad global de viajeros.
+          © 2024 AIReview — Tu comunidad inteligente de viajeros.
         </footer>
       </section>
     </main>
@@ -251,6 +272,14 @@
       let rating = 0;
       let anonymous = false;
       let reviews = JSON.parse(localStorage.getItem('air_reviews_data') || '[]');
+
+      // Dropdown toggle
+      const userDropdown = document.getElementById('userDropdown');
+      userDropdown.addEventListener('click', (e) => {
+        userDropdown.classList.toggle('active');
+        e.stopPropagation();
+      });
+      window.addEventListener('click', () => userDropdown.classList.remove('active'));
 
       function showToast(msg, color = 'var(--accent)') {
         toast.textContent = msg;
