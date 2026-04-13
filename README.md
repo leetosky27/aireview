@@ -8,26 +8,31 @@
 
 El sistema permite capturar datos cualitativos y cuantitativos de viajeros para generar una base de conocimientos sobre la calidad del servicio en aerolíneas nacionales (como Avianca, Wingo, LATAM Colombia, entre otras). La aplicación busca optimizar la obtención de información y ofrecer respuestas precisas a través de un motor de análisis de datos.
 
-## 🛠️ Funcionalidades Principales
+## 🛠️ Módulos del Sistema
 
-### 1. Registro y Gestión de Datos de Usuario
-*   **Autenticación Completa:** Módulos de Inicio de Sesión (`login.html`), Registro de nuevos usuarios (`register.html`) y Recuperación de cuenta (`reset.html`).
-*   **Perfil Personalizado:** Espacio dedicado (`profile.html`) donde el cliente puede gestionar su información personal, incluyendo:
-    *   Foto de perfil.
-    *   Identificación (Cédula/ID).
-    *   Nacionalidad y país de residencia.
-    *   Teléfono de contacto.
+El sistema se compone de cinco módulos integrados que permiten el flujo completo de la información:
 
-### 2. Sistema de Reseñas Interactivo
-*   **Captura de Datos:** Formulario estructurado para registrar el nombre de la aerolínea, título de la experiencia, fecha del vuelo y comentarios detallados.
-*   **Medición Cuantitativa:** Sistema de calificación mediante estrellas (1-5) para medir la satisfacción del cliente de forma visual.
-*   **Modo Anónimo:** Opción para proteger la identidad del usuario durante la publicación.
-*   **Gestión de Datos:** Capacidad para filtrar por aerolínea, ordenar por relevancia/fecha y persistencia de datos mediante `localStorage`.
+### 1. Módulo de Seguridad y Acceso
+*   **Gestión de Sesiones:** Control de entrada mediante `login.html`.
+*   **Registro de Analistas:** Captura de nuevos usuarios a través de `register.html`.
+*   **Soporte de Cuenta:** Recuperación de credenciales mediante el flujo de `reset.html`.
 
-### 3. AirAssistant IA (Módulo de Inteligencia Artificial)
-El núcleo del proyecto integra una interfaz de **Inteligencia Artificial** diseñada para interactuar con la información almacenada:
-*   **Análisis Predictivo y Descriptivo:** El usuario puede realizar consultas en lenguaje natural sobre las reseñas (ej. "¿Cuál es la aerolínea con mejor servicio?").
-*   **Procesamiento de Información:** La IA analiza el volumen de datos registrados, promedia calificaciones y extrae sentimientos de los comentarios para ofrecer respuestas concretas, claras y basadas en evidencia real.
+### 2. Módulo de Gestión de Usuario (Perfil)
+*   **Identidad Digital:** Administración de información personal en `profile.html`, incluyendo carga de fotografía de perfil, datos demográficos (nacionalidad/residencia) e identificación oficial.
+
+### 3. Módulo de Recolección de Datos (Feedback Loop)
+*   **Captura de Experiencia:** Formulario robusto en `index.html` para datos cualitativos (comentarios) y cuantitativos (estrellas).
+*   **Atributos de Viaje:** Registro detallado de aerolínea, fecha de vuelo y títulos descriptivos.
+*   **Privacidad del Usuario:** Opción de "Modo Anónimo" para publicaciones protegidas.
+
+### 4. Módulo de Análisis Inteligente (AirAssistant IA)
+*   **Motor de Consultas:** Interfaz de IA que procesa lenguaje natural para interrogar la base de datos de reseñas.
+*   **Análisis de Sentimientos y Tendencias:** Capacidad para identificar la aerolínea con mejor desempeño, resumir críticas negativas y promediar niveles de satisfacción en tiempo real.
+
+### 5. Módulo de Persistencia y Visualización Dinámica
+*   **Motor de Búsqueda:** Sistema de filtrado en tiempo real por palabras clave y aerolíneas.
+*   **Gestión de Base de Datos:** Persistencia mediante la API de `localStorage` y lógica de ordenamiento (por fecha o calificación).
+*   **Interfaz de Usuario (UI):** Visualización basada en componentes dinámicos con estados de carga y retroalimentación visual (Toasts).
 
 ## 🎨 Diseño y Experiencia de Usuario (UX/UI)
 
