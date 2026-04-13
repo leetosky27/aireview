@@ -29,7 +29,12 @@ El sistema se compone de cinco módulos integrados que permiten el flujo complet
 *   **Motor de Consultas:** Interfaz de IA que procesa lenguaje natural para interrogar la base de datos de reseñas.
 *   **Análisis de Sentimientos y Tendencias:** Capacidad para identificar la aerolínea con mejor desempeño, resumir críticas negativas y promediar niveles de satisfacción en tiempo real.
 
-### 5. Módulo de Persistencia y Visualización Dinámica
+### 5. Módulo de Administración (Panel de Control)
+*   **Monitoreo Global:** Panel centralizado en `admin.html` para visualizar métricas clave como el total de reseñas y el promedio de calificación de la plataforma.
+*   **Moderación de Contenido:** Capacidad del administrador para supervisar y eliminar reseñas para mantener la integridad de la información.
+*   **Gestión de Usuarios:** Control y supervisión de las cuentas de analistas registradas en el sistema.
+
+### 6. Módulo de Persistencia y Visualización Dinámica
 *   **Motor de Búsqueda:** Sistema de filtrado en tiempo real por palabras clave y aerolíneas.
 *   **Gestión de Base de Datos:** Persistencia mediante la API de `localStorage` y lógica de ordenamiento (por fecha o calificación).
 *   **Interfaz de Usuario (UI):** Visualización basada en componentes dinámicos con estados de carga y retroalimentación visual (Toasts).
@@ -47,6 +52,7 @@ La interfaz ha sido diseñada bajo un concepto **Aeronáutico/Minimalista** que 
 *   `login.html`: Interfaz de acceso al ecosistema.
 *   `register.html`: Formulario de captura de nuevos analistas/usuarios.
 *   `reset.html`: Sistema de recuperación de credenciales.
+*   `admin.html`: Panel de control para la gestión de métricas y moderación.
 *   `profile.html`: Centro de gestión de perfil y datos demográficos del cliente.
 
 ## 🧪 Tecnologías Utilizadas

@@ -140,7 +140,7 @@
         <h1>Únete a AIReview</h1>
         <p>Crea tu cuenta para empezar a reseñar</p>
 
-        <form action="login.html">
+        <form id="registerForm">
             <div class="input-group">
                 <label for="name">Nombre Completo</label>
                 <input type="text" id="name" placeholder="Tu nombre" required>
@@ -163,5 +163,21 @@
             </div>
         </form>
     </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('user').value;
+            const pass = document.getElementById('pass').value;
+
+            const users = JSON.parse(localStorage.getItem('air_users_data') || '[]');
+            users.push({ name, email, pass, date: Date.now() });
+            localStorage.setItem('air_users_data', JSON.stringify(users));
+
+            alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
+            window.location.href = 'login.html';
+        });
+    </script>
 </body>
 </html>
