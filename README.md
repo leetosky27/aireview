@@ -68,8 +68,8 @@ La interfaz ha sido diseñada bajo un concepto **Aeronáutico/Minimalista** que 
 ## 👥 Créditos e Información Académica
 
 **Elaborado por:**
-1. **Martin Lee Moya Llano**
-2. **Nicolas Zarate**
+1. **Martin Lee Moya Llano** (@leetosky27)
+2. **Nicolas Zarate** (@Nicolanz)
 
 **Institución:** Corporación Universitaria Minuto de Dios  
 **Docente:** Hector Ladino  
